@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0bH-H6-939">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19162"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,22 +16,55 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="UtC-T1-Bvk" style="IBUITableViewCellStyleDefault" id="ZEx-jk-KQj" customClass="Cell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="ZEx-jk-KQj" customClass="PokemonRowTableViewCell" customModule="Flygondex" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZEx-jk-KQj" id="M3D-aM-bST">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UtC-T1-Bvk">
-                                            <rect key="frame" x="20" y="0.0" width="374" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="nome" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvr-Mn-8cR">
+                                            <rect key="frame" x="60" y="6" width="60" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.arrow.up.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-3P-vGI">
+                                            <rect key="frame" x="16" y="12.5" width="20" height="19"/>
+                                        </imageView>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.arrow.up.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mW5-gf-ayu">
+                                            <rect key="frame" x="303.5" y="12.5" width="20" height="19"/>
+                                        </imageView>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="aHA-Cl-BXN">
+                                            <rect key="frame" x="362" y="12.5" width="20" height="19"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" layoutMarginsFollowReadableWidth="YES" text="#num" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPt-FS-OtQ">
+                                            <rect key="frame" x="174" y="11" width="36" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" systemColor="systemGray2Color"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Hjb-3P-vGI" firstAttribute="centerY" secondItem="M3D-aM-bST" secondAttribute="centerY" id="5lf-g4-bqt"/>
+                                        <constraint firstItem="mW5-gf-ayu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iPt-FS-OtQ" secondAttribute="trailing" constant="60" id="6xR-cz-FEu"/>
+                                        <constraint firstItem="Lvr-Mn-8cR" firstAttribute="leading" secondItem="Hjb-3P-vGI" secondAttribute="trailing" constant="24" id="9PX-rg-Azc"/>
+                                        <constraint firstItem="aHA-Cl-BXN" firstAttribute="leading" secondItem="mW5-gf-ayu" secondAttribute="trailing" constant="38.5" id="BSg-U4-RgA"/>
+                                        <constraint firstItem="mW5-gf-ayu" firstAttribute="centerY" secondItem="aHA-Cl-BXN" secondAttribute="centerY" id="Bg0-j1-kY5"/>
+                                        <constraint firstItem="iPt-FS-OtQ" firstAttribute="centerY" secondItem="mW5-gf-ayu" secondAttribute="centerY" id="F5c-um-7fN"/>
+                                        <constraint firstItem="aHA-Cl-BXN" firstAttribute="centerY" secondItem="M3D-aM-bST" secondAttribute="centerY" id="N8T-zi-tfu"/>
+                                        <constraint firstItem="Lvr-Mn-8cR" firstAttribute="centerY" secondItem="Hjb-3P-vGI" secondAttribute="centerY" id="Shx-UX-anI"/>
+                                        <constraint firstAttribute="trailing" secondItem="aHA-Cl-BXN" secondAttribute="trailing" constant="32" id="eOR-7V-8jM"/>
+                                        <constraint firstItem="Hjb-3P-vGI" firstAttribute="leading" secondItem="M3D-aM-bST" secondAttribute="leading" constant="16" id="swD-sG-wxb"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="pokemonImage" destination="Hjb-3P-vGI" id="DzT-Mr-7rb"/>
+                                    <outlet property="pokemonName" destination="Lvr-Mn-8cR" id="Hsw-hj-kad"/>
+                                    <outlet property="pokemonNum" destination="iPt-FS-OtQ" id="dIw-6N-4uz"/>
+                                    <outlet property="pokemonTypeOne" destination="mW5-gf-ayu" id="Hsf-XF-aMA"/>
+                                    <outlet property="pokemonTypeTwo" destination="aHA-Cl-BXN" id="26H-P3-jZx"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -42,12 +75,18 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VdM-Rx-INZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-72" y="101"/>
+            <point key="canvasLocation" x="-72.463768115942031" y="100.44642857142857"/>
         </scene>
     </scenes>
     <resources>
+        <image name="pencil.circle" catalog="system" width="128" height="121"/>
+        <image name="square.and.arrow.up.circle" catalog="system" width="128" height="121"/>
+        <image name="square.and.arrow.up.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

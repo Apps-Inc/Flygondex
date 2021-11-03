@@ -40,10 +40,11 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? PokemonRowTableViewCell else {fatalError("quebrouu") }
+        
+        let pokemonInfo = pokemonList?.results[indexPath.row]
                 
-        print(indexPath.row)
-        cell.textLabel?.text = pokemonList?.results[indexPath.row].name
+        cell.pokemonName?.text = pokemonInfo.name
         return cell
     }
     

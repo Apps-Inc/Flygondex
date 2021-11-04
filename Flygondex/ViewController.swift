@@ -8,31 +8,18 @@
 import UIKit
 
 class ViewController: UITableViewController {
-    var pokemonList: [PokemonRequest] = []
+    var pokemonList: [PokemonInfo] = []
     var pokemonRequestPosition: PokemonListRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100&offset=0")!
-        
-        Task {
-            guard let (data,_) = try? await URLSession.shared.data(from: url) else {return}
-            
-            guard let result = try? JSONDecoder().decode(PokemonListRequest.self, from: data) else {return}
-            self.pokemonRequestPosition = result
-            result.results.forEach{item in
-                Task{
-                    guard let pokemon = await self.loadPokemonInformation(pokemonBasicInfos: item) else {fatalError()}
-                    
-                    DispatchQueue.main.async {
-                        let index = self.pokemonList.firstIndex {$0.id > pokemon.id} ?? self.pokemonList.endIndex
-                        self.pokemonList.insert(pokemon, at: index)
-                        let indexPath = IndexPath(row: index, section: 0 )
-                        self.tableView.insertRows(at: [indexPath], with: .automatic)
-                    }
-                }
-            }
-            
+        title = "Flygondex"
+        navigationController?.navigationBar.prefersLargeTitles = true
+
+        let url = "https://pokeapi.co/api/v2/pokemon?limit=100&offset=0"
+
+        Task{
+            await loadPokemonList(url: url)
         }
         
     }
@@ -44,18 +31,25 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? PokemonRowTableViewCell else {fatalError("quebrouu") }
         
+//        if Double(indexPath.row) / Double(pokemonList.count) >= 0.8 {
+//            Task{
+//                await loadPokemonList(url: self.pokemonRequestPosition?.next)
+//            }
+//        }
+//        
         let pokemonInfo = pokemonList[indexPath.row]
         cell.pokemonNum?.text = String(pokemonInfo.id)
         cell.pokemonName?.text = pokemonInfo.name!
         cell.pokemonTypeTwo.image = nil
+        
+        
         DispatchQueue.global().async {
             
-            if let pokemonImage = self.loadImage(url: pokemonInfo.sprites.front_default){
                 
                 DispatchQueue.main.async {
-                    cell.pokemonImage.image = pokemonImage
+                    cell.pokemonImage.image = pokemonInfo.image
                 }
-            }
+        
             for pType in pokemonInfo.types {
                 let typeImage = UIImage(named: pType.type.name)
                 
@@ -100,6 +94,39 @@ class ViewController: UITableViewController {
         
         return nil
         
+    }
+    
+    func loadPokemonList(url: String?) async {
+        guard let url = url else {return}
+        guard let url = URL(string: url) else {return}
+        guard let (data,_) = try? await URLSession.shared.data(from: url) else {return}
+        guard let result = try? JSONDecoder().decode(PokemonListRequest.self, from: data) else {return}
+        self.pokemonRequestPosition = result
+        result.results.forEach{item in
+            Task{
+                guard let pokemon = await self.loadPokemonInformation(pokemonBasicInfos: item) else {fatalError()}
+                guard let pokemonImage = self.loadImage(url: pokemon.sprites.front_default) else {return }
+
+                DispatchQueue.main.async {
+                    let index = self.pokemonList.firstIndex {$0.id > pokemon.id} ?? self.pokemonList.endIndex
+                    
+                    self.pokemonList.insert(PokemonInfo(pr: pokemon, image: pokemonImage, name: item.name), at: index)
+
+            
+                            
+                    let indexPath = IndexPath(row: index, section: 0 )
+                    self.tableView.insertRows(at: [indexPath], with: .automatic)
+                }
+            }
+        }
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "PokemonInfo") as? PokemonViewController {
+            vc.pokemonInfo = pokemonList[indexPath.row]
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     

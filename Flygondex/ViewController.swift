@@ -15,41 +15,25 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100&offset=0")!
         
-        DispatchQueue.global(qos: .background).async {
-            URLSession.shared.dataTask(with: url) {(data, response, error) in
-                guard let data = data else { return }
-                
-                if let result = try? JSONDecoder().decode(PokemonListRequest.self, from: data) {
+        Task {
+            guard let (data,_) = try? await URLSession.shared.data(from: url) else {return}
+            
+            guard let result = try? JSONDecoder().decode(PokemonListRequest.self, from: data) else {return}
+            self.pokemonRequestPosition = result
+            result.results.forEach{item in
+                Task{
+                    guard let pokemon = await self.loadPokemonInformation(pokemonBasicInfos: item) else {fatalError()}
                     
-                    self.pokemonRequestPosition = result
-                    self.pokemonRequestPosition!.results.forEach{
-                        requestInfo in
-                        
-                        let pokemonUrl = URL(string: requestInfo.url)!
-                        URLSession.shared.dataTask(with: pokemonUrl){ (pokemonData, response, error) in
-                            
-                            if var pokemon = try? JSONDecoder().decode(PokemonRequest.self, from: pokemonData!) {
-                                
-                                DispatchQueue.main.async {
-                                    
-                                    pokemon.name = requestInfo.name
-                                    let index = self.pokemonList.firstIndex {$0.id > pokemon.id} ?? self.pokemonList.endIndex
-                                    self.pokemonList.insert(pokemon, at: index)
-                                    
-                                    let indexPath = IndexPath(row: index, section: 0 )
-                                    self.tableView.insertRows(at: [indexPath], with: .automatic)
-                                }
-                            }
-                        }.resume()
-                        
+                    DispatchQueue.main.async {
+                        let index = self.pokemonList.firstIndex {$0.id > pokemon.id} ?? self.pokemonList.endIndex
+                        self.pokemonList.insert(pokemon, at: index)
+                        let indexPath = IndexPath(row: index, section: 0 )
+                        self.tableView.insertRows(at: [indexPath], with: .automatic)
                     }
-                    
-                } else {
-                    fatalError()
                 }
-            }.resume()
+            }
+            
         }
-        
         
     }
     
@@ -102,9 +86,22 @@ class ViewController: UITableViewController {
         return imageResult
     }
     
-    func findTypeImage(type : String){
+    func loadPokemonInformation(pokemonBasicInfos : PokemonListResult) async -> PokemonRequest?{
+        let pokemonUrl = URL(string: pokemonBasicInfos.url)!
+        
+        do {
+            let (pokemonData,_) = try await URLSession.shared.data(for: URLRequest(url: pokemonUrl))
+            if var pokemon = try? JSONDecoder().decode(PokemonRequest.self, from: pokemonData) {
+                pokemon.name = pokemonBasicInfos.name
+                return pokemon
+            }
+            
+        }catch {}
+        
+        return nil
         
     }
+    
     
 }
 

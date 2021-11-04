@@ -13,8 +13,7 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100&offset=100")!
-        
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100&offset=0")!
         
         DispatchQueue.global(qos: .background).async {
             URLSession.shared.dataTask(with: url) {(data, response, error) in
@@ -46,7 +45,7 @@ class ViewController: UITableViewController {
                     }
                     
                 } else {
-                    print("error")
+                    fatalError()
                 }
             }.resume()
         }

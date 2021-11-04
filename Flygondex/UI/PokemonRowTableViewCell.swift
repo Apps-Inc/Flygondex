@@ -19,6 +19,7 @@ class PokemonRowTableViewCell: UITableViewCell {
         super.awakeFromNib()
 //        pokemonName.adjustsFontSizeToFitWidth = true
         // Initialization code
+        pokemonImage.contentMode = .scaleAspectFit
     }
     
 
